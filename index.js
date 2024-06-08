@@ -5,6 +5,8 @@ import userRouter from "./routers/users.routes.js";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 
+export const secret = "mysecret";
+
 const app = express();
 
 mongoose.connect("mongodb://localhost:27017/formation");

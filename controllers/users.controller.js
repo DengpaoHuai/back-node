@@ -1,5 +1,7 @@
 import User from "../models/users.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { secret } from "../index.js";
 
 export const register = async (req, res) => {
   console.log(req.body);
@@ -26,16 +28,20 @@ export const login = async (req, res) => {
   if (user) {
     const compare = await bcrypt.compare(password, user.password);
     if (compare) {
-      return res.json({ message: "Login successful" });
-    } else {
-      return res.json({ message: "Invalid password" });
+      //jwt
+      const token = jwt.sign({ id: user._id }, secret, { expiresIn: "1h" });
+      return res.json({ token: token });
     }
   }
-  return res.json({ message: "User not found" });
+  return res.status(401).json({ message: "Incorrect credentials" });
 };
 
 export const getUserById = async (req, res) => {
   const id = req.params.id;
-  const user = await User.findById(id).populate("country");
-  res.json(user);
+  if (id === req.userId) {
+    const user = await User.findById(id).populate("country");
+    return res.json(user);
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 };
