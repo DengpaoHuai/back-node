@@ -15,6 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  country: {
+    type: Schema.Types.ObjectId,
+    ref: "Country",
+  },
 });
 
 const User = mongoose.model("User", userSchema);

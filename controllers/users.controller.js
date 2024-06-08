@@ -13,6 +13,7 @@ export const register = async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: monPasswordCompletementCacheEtSecurise,
+    country: "6663f656300c92bb299116ab",
   });
   res.json({ message: "User registered successfully" });
 };
@@ -31,4 +32,10 @@ export const login = async (req, res) => {
     }
   }
   return res.json({ message: "User not found" });
+};
+
+export const getUserById = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id).populate("country");
+  res.json(user);
 };
